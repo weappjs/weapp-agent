@@ -25,3 +25,5 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Agent design references (Codex, OpenCode, Pi) are documented with commit IDs in the architecture guide. No source code was copied from those agent implementations. Dependency licenses remain with their packages.
+
+The bundled Inter font is Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter), licensed under SIL Open Font License 1.1. See `apps/docs/public/fonts/LICENSE.txt`.

@@ -7,7 +7,7 @@ Validation performed on 2026-09-30 with Node.js 24.18.0 and pnpm 12.6.0. This is
 | repoctl bootstrap           | Passed                 | create-repoctl 1.0.5, CLI/tsdown templates; repo new; repo init                                                                                |
 | repoctl doctor/check        | Passed                 | 10 doctor checks; staged check also runs at commit                                                                                             |
 | Build, lint, typecheck      | Passed locally         | Five workspace packages; Nimbus lint 13 documents, Astro check 0 errors/warnings/hints                                                         |
-| Deterministic tests         | Passed                 | 29 tests: tool loop, approvals, cancellation, recovery, compaction, provider streams, stdio/HTTP MCP                                           |
+| Deterministic tests         | Passed                 | 30 tests: tool loop, approvals, cancellation, recovery, compaction, provider streams, stdio/HTTP MCP, no Git textconv execution                |
 | Standalone package          | Passed                 | Tarball installed in clean temporary project; help/init/verify work without private workspace packages                                         |
 | Native + Wevu real projects | Passed                 | Official create-weapp-vite 3.0.1 templates, weapp-vite 7.4.0; add page, fail real build, repair, rebuild, check compiled route, resume session |
 | Real WeChat DevTools        | Passed (native + Wevu) | One MCP connection shared across connect → reLaunch → counter tap (0 → 1) → screenshot → console log; no Web/headless substitute               |

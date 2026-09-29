@@ -11,6 +11,7 @@ import {
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
+import { execa } from 'execa'
 import { afterEach, beforeEach, expect, it } from 'vitest'
 import {
   configSchema,
@@ -124,4 +125,18 @@ it('invalidates the current in-memory authorization when disk configuration chan
   const before = await projectFingerprint(root, config)
   await writeFile(file, JSON.stringify({ ...config, maxSteps: 2 }))
   expect(await projectFingerprint(root, config)).not.toBe(before)
+})
+
+it('does not execute repository textconv commands while reading a Git diff', async () => {
+  await execa('git', ['init'], { cwd: root })
+  await writeFile(path.join(root, '.gitattributes'), '*.txt diff=probe\n')
+  await writeFile(path.join(root, 'probe.cjs'), 'require(\'node:fs\').writeFileSync(\'unexpected-execution\', \'unsafe\')')
+  await writeFile(path.join(root, 'page.txt'), 'before')
+  await execa('git', ['add', '.gitattributes', 'page.txt'], { cwd: root })
+  await execa('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.com', '-c', 'commit.gpgsign=false', 'commit', '-m', 'fixture'], { cwd: root })
+  await execa('git', ['config', 'diff.probe.textconv', 'node probe.cjs'], { cwd: root })
+  await writeFile(path.join(root, 'page.txt'), 'after')
+  const diff = await fileTools().find(t => t.name === 'git_diff')!.execute({}, { ...ctx, trusted: false })
+  expect(diff.text).toContain('+after')
+  await expect(readFile(path.join(root, 'unexpected-execution'))).rejects.toThrow()
 })

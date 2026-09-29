@@ -1,4 +1,5 @@
 import type { MonorepoConfig } from 'repoctl'
+import { createMonorepoLintStagedConfig } from 'repoctl/tooling'
 
 export default {
   commands: {
@@ -16,6 +17,12 @@ export default {
     },
   },
   tooling: {
+    husky: {
+      // repoctl 5.5.8 spawns pnpm without Windows .cmd resolution. Invoke Node
+      // entrypoints through its supported hook configuration instead.
+      preCommitCommand: 'node node_modules/lint-staged/bin/lint-staged.js',
+      commitMsgCommand: 'node node_modules/@commitlint/cli/cli.js --edit "{editFile}"',
+    },
     commitlint: {
       extends: ['@commitlint/config-conventional'],
     },
@@ -32,7 +39,12 @@ export default {
       },
     },
     lintStaged: {
-      monorepoCommand: 'pnpm exec repo',
+      config: {
+        ...createMonorepoLintStagedConfig(),
+        // lint-staged resolves package-manager shims on Windows. Run all five
+        // workspace checks without repoctl's nested spawnSync('pnpm') call.
+        '*.{ts,tsx,mts,cts,vue,json}': () => 'pnpm typecheck',
+      },
     },
     vitest: {
       includeWorkspaceRootConfig: false,

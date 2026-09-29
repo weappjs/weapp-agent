@@ -224,19 +224,24 @@ export function fileTools(): Tool[] {
         const diff = await execa(
           'git',
           [
+            '-c',
+            'core.fsmonitor=false',
             '--no-pager',
             'diff',
             '--no-ext-diff',
+            '--no-textconv',
             '--',
             '.',
             ':!.env*',
             ':!*.pem',
             ':!*.key',
+            ':!*.p12',
+            ':!.weapp-agent/**',
             ':!.npmrc',
           ],
           { cwd: ctx.root, cancelSignal: ctx.signal, reject: false },
         )
-        const status = await execa('git', ['status', '--short'], {
+        const status = await execa('git', ['-c', 'core.fsmonitor=false', 'status', '--short'], {
           cwd: ctx.root,
           cancelSignal: ctx.signal,
           reject: false,
