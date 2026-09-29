@@ -1,6 +1,7 @@
 import type { AddressInfo } from 'node:net'
 import { createServer } from 'node:http'
 import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
 import { configSchema, projectFingerprint } from '@weappjs/core'
@@ -24,7 +25,7 @@ it('discovers stdio tools, validates input, and does not trust third-party readO
       name: 'fixture',
       transport: 'stdio',
       command: process.execPath,
-      args: [new URL('./fixtures/server.mjs', import.meta.url).pathname],
+      args: [fileURLToPath(new URL('./fixtures/server.mjs', import.meta.url))],
     },
     context,
     { config, fingerprint: await projectFingerprint(root, config) },

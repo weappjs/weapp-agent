@@ -10,6 +10,15 @@
 
 源码预览版。仓库提供可运行实现和可打包 CLI，尚未发布 npm 包。实际验收记录见 [VALIDATION.md](VALIDATION.md)，模拟测试与真实模型、DevTools 验证分别记录。
 
+## 安装预览包
+
+从 [GitHub Releases](https://github.com/weappjs/weapp-agent/releases) 下载 `.tgz`，无需等待 npm 发布：
+
+```bash
+npm install --global ./weappjs-agent-0.1.0-preview.1.tgz
+weapp-agent --version
+```
+
 ## 从源码开始
 
 需要 Node.js 24.15+、pnpm。
