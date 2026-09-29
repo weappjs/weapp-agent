@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+export const prerender = true;
+---
+<BaseLayout title="Weapp Agent · 让需求走进小程序" description="理解项目，编写代码，在微信运行时验证。面向 weapp-vite 的独立 AI 开发助手。">
+  <Header showSidebar={false} />
+  <main id="main-content" tabindex="-1" class="wa-home" data-pagefind-body>
+    <div class="wa-kicker"><span class="wa-mark" aria-hidden="true">w_</span><span>WEAPPJS / DEVELOPER TOOLS</span><span class="wa-version">EARLY PREVIEW</span></div>
+    <section class="wa-hero">
+      <div class="wa-intro">
+        <p class="wa-eyebrow">你的项目，你的模型，你的开发节奏。</p>
+        <h1>让需求<br />走进<span>小程序。</span></h1>
+        <p class="wa-description">在终端描述想做的事。Weapp Agent 理解项目、修改代码，再把构建、测试和运行结果带回来。</p>
+        <div class="wa-actions"><a class="wa-primary" href="/getting-started">开始使用 <span aria-hidden="true">↗</span></a><a class="wa-secondary" href="/workflow">看看它怎么工作 <span aria-hidden="true">→</span></a></div>
+        <p class="wa-platform">微信小程序 · weapp-vite · 原生 / Wevu</p>
+      </div>
+      <div class="wa-terminal" aria-label="开发流程示例，不代表实际执行记录">
+        <div class="wa-terminal-bar"><span>TERMINAL</span><span>weapp-agent</span><span class="wa-demo">示例</span></div>
+        <div class="wa-terminal-body">
+          <p class="wa-prompt"><span>›</span> 给首页增加一个任务清单，<br /><span class="wa-indent">支持新增和切换完成状态。</span></p>
+          <div class="wa-step"><span class="wa-tick">✓</span><div><strong>理解项目</strong><p>读取页面、组件和项目约定</p></div><span class="wa-step-tag">READ</span></div>
+          <div class="wa-step"><span class="wa-tick">✓</span><div><strong>完成修改</strong><p>pages/index/index.vue</p></div><span class="wa-step-tag">EDIT</span></div>
+          <pre class="wa-diff"><code is:raw>+ const tasks = ref([])
++ const addTask = () =&gt; { … }
++ const toggleTask = (id) =&gt; { … }</code></pre>
+          <div class="wa-step"><span class="wa-tick">✓</span><div><strong>构建与测试</strong><p>执行项目配置的检查命令</p></div><span class="wa-step-tag">VERIFY</span></div>
+          <div class="wa-evidence"><span class="wa-evidence-dot"></span><span>微信运行时</span><strong>单独记录验证结果</strong></div>
+        </div>
+        <div class="wa-terminal-footer"><span>结果有依据，改动可检查。</span><span aria-hidden="true">↵</span></div>
+      </div>
+    </section>
+    <section class="wa-principles" aria-label="产品能力">
+      <article><span class="wa-caption">从现有项目开始</span><h2>沿用你的技术栈</h2><p>识别页面、分包和工程脚本，遵循项目里的 AGENTS.md。新项目使用官方 weapp-vite 模板。</p><a href="/projects">项目接入 →</a></article>
+      <article><span class="wa-caption">把执行过程摊开</span><h2>每一步都有记录</h2><p>查看工具调用和代码差异。中断后恢复会话，先核对执行状态，再继续工作。</p><a href="/sessions">会话与恢复 →</a></article>
+      <article><span class="wa-caption">选择适合的模型</span><h2>引擎保持独立</h2><p>支持 OpenAI、Anthropic 和兼容接口。使用自己的 API Key，在本地完成开发操作。</p><a href="/models">配置模型 →</a></article>
+    </section>
+    <section class="wa-reading"><div><span class="wa-caption">先跑通一次真实的改动</span><h2>从一个页面开始。</h2><p>安装 CLI，连接模型，再给它一个明确的小任务。</p></div><a class="wa-primary" href="/getting-started">阅读快速开始 ↗</a></section>
+    <footer class="wa-footer"><span>WEAPP AGENT / WEAPPJS</span><nav aria-label="页脚"><a href="https://github.com/weappjs/weapp-agent">GitHub</a><a href="/architecture">架构</a><a href="/llms.txt">给 AI 的文档</a><a href="/en/quickstart">English</a></nav><span>开源 · MIT</span></footer>
+  </main>
+</BaseLayout>
+<style>
+  .wa-home{--wa-ink:#19334b;--wa-blue:#176779;--wa-line:#d7e1e6;max-width:1180px;margin:0 auto;padding:54px 36px 20px;color:var(--nb-foreground)}
+  .wa-kicker{display:flex;align-items:center;gap:18px;font:11px var(--font-mono,monospace);letter-spacing:.12em;color:var(--nb-muted-foreground)}
+  .wa-mark{background:var(--wa-blue);color:white;display:grid;place-items:center;width:37px;height:37px;font-size:21px;letter-spacing:-2px;border-radius:10px}
+  .wa-version{margin-left:auto;border:1px solid var(--nb-border);padding:5px 8px;border-radius:4px;font-size:10px}
+  .wa-hero{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:center;padding:62px 0 72px}.wa-eyebrow{font-size:13px;color:var(--nb-muted-foreground);margin-bottom:24px}
+  h1{font-size:clamp(40px,5vw,64px);font-weight:650;letter-spacing:-.07em;line-height:1.23;margin:0 0 26px}h1 span{color:var(--wa-blue)}.wa-description{font-size:16px;line-height:1.95;color:var(--nb-muted-foreground);max-width:400px;margin:0 0 30px}.wa-actions{display:flex;align-items:center;gap:22px}.wa-primary{display:inline-flex;align-items:center;justify-content:space-between;gap:24px;background:var(--wa-blue);color:#fff;padding:13px 19px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:600;transition:background .2s,transform .2s}.wa-primary:hover{background:#124f60;transform:translateY(-1px)}.wa-secondary{font-size:13px;text-decoration:none;color:var(--nb-foreground)}.wa-platform{font-size:11px;letter-spacing:.04em;color:var(--nb-muted-foreground);margin-top:24px}
+  .wa-terminal{border:1px solid #2e526a;border-radius:12px;background:#132d42;color:#dbe9f0;box-shadow:0 22px 55px #1233491a;overflow:hidden;transform:rotate(-1deg)}.wa-terminal-bar{display:flex;gap:15px;padding:13px 19px;border-bottom:1px solid #2e4a60;font:10px monospace;color:#9ab7c9}.wa-terminal-bar span:nth-child(2){margin:auto}.wa-demo{border:1px solid #4a6173;padding:0 5px}.wa-terminal-body{padding:24px}.wa-prompt{font-size:14px;line-height:1.8;margin:0 0 24px;color:#eef5f7}.wa-prompt>span:first-child{color:#8ececf;margin-right:10px}.wa-indent{padding-left:21px}.wa-step{display:flex;gap:12px;align-items:flex-start;margin:19px 0}.wa-tick{color:#97d8bb;font:14px monospace;padding-top:3px}.wa-step strong{font-size:12px;font-weight:500}.wa-step p{font-size:11px;color:#9bb3c3;margin:5px 0 0}.wa-step-tag{font:9px monospace;letter-spacing:.09em;margin-left:auto;margin-top:5px;color:#8da6b9}.wa-diff{margin:0 0 20px 24px;padding-left:13px;border-left:2px solid #5f9b89;overflow:auto;color:#a8d7c5;font:11px/1.85 monospace;background:none}.wa-evidence{display:flex;align-items:center;gap:8px;border:1px solid #476071;border-radius:5px;padding:11px;font-size:10px;color:#bed0dc}.wa-evidence strong{font-weight:400;margin-left:auto}.wa-evidence-dot{width:6px;height:6px;border-radius:50%;background:#8dc7d5}.wa-terminal-footer{padding:12px 20px;background:#1b384e;border-top:1px solid #2e4a60;display:flex;justify-content:space-between;font-size:10px;color:#a4bdcd}
+  .wa-principles{border-top:1px solid var(--nb-border);border-bottom:1px solid var(--nb-border);display:grid;grid-template-columns:repeat(3,1fr);padding:34px 0;gap:38px}.wa-principles article+article{border-left:1px solid var(--nb-border);padding-left:34px}.wa-caption{font-size:11px;color:var(--nb-muted-foreground)}.wa-principles h2{font-size:20px;letter-spacing:-.03em;font-weight:600;margin:12px 0}.wa-principles p{font-size:13px;line-height:1.9;color:var(--nb-muted-foreground);margin:0 0 18px}.wa-principles a{font-size:12px;color:var(--wa-blue);text-decoration:none}.wa-reading{display:flex;align-items:center;justify-content:space-between;padding:46px 0}.wa-reading h2{font-size:30px;letter-spacing:-.05em;margin:12px 0}.wa-reading p{font-size:13px;color:var(--nb-muted-foreground);margin:0}.wa-footer{border-top:1px solid var(--nb-border);padding:22px 0;display:flex;gap:20px;justify-content:space-between;color:var(--nb-muted-foreground);font-size:10px}.wa-footer nav{display:flex;gap:20px}.wa-footer a{color:inherit;text-decoration:none}a:focus-visible{outline:3px solid #4e9cb0;outline-offset:4px}
+  :global([data-mode="dark"]) .wa-home{--wa-blue:#83c8d4}:global([data-mode="dark"]) .wa-primary{background:#286d7d;color:#fff}
+  @media(max-width:820px){.wa-hero{gap:35px;grid-template-columns:1fr;padding:42px 0}.wa-intro{max-width:550px}h1{font-size:49px}.wa-terminal{transform:none;max-width:540px}.wa-home{padding:30px 24px 16px}.wa-principles{gap:22px}.wa-principles article+article{padding-left:22px}.wa-actions{gap:16px}}
+  @media(max-width:540px){.wa-kicker{gap:10px;font-size:9px;letter-spacing:.05em}.wa-version{font-size:8px}.wa-home{padding:25px 20px 12px}.wa-eyebrow{font-size:11px}.wa-principles{grid-template-columns:1fr;padding:25px 0}.wa-principles article+article{border-left:0;border-top:1px solid var(--nb-border);padding:22px 0 0}.wa-reading{align-items:flex-start;gap:24px;flex-direction:column}.wa-footer{flex-wrap:wrap;gap:16px}.wa-footer nav{order:3;width:100%;gap:18px}.wa-terminal-body{padding:20px}.wa-evidence{font-size:9px}.wa-secondary{font-size:12px}.wa-primary{padding:12px 15px;gap:15px}.wa-platform{font-size:10px}}
+  @media(prefers-reduced-motion:reduce){.wa-primary{transition:none}.wa-primary:hover{transform:none}}
+</style>

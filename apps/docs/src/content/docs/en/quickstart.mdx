@@ -1,0 +1,41 @@
+---
+title: "Quickstart"
+description: "An independent coding agent for WeChat mini-programs."
+sidebar:
+  order: 12
+---
+
+## Build from source
+
+Weapp Agent is an early source preview. It is not published to npm yet. Use Node.js 24.15 or newer and pnpm.
+
+```bash
+git clone https://github.com/weappjs/weapp-agent.git
+cd weapp-agent
+corepack enable
+pnpm install
+pnpm build
+node apps/cli/dist/index.mjs --help
+```
+
+Pack `@weappjs/agent` and install the generated tarball to use the `weapp-agent` command globally.
+
+## Configure a project
+
+```bash
+weapp-agent init --provider openai --model YOUR_MODEL
+weapp-agent doctor
+weapp-agent --trust run "Add a counter to the home page and verify the change"
+```
+
+Set `OPENAI_API_KEY` in your terminal environment. For Anthropic, select `--provider anthropic` and set `ANTHROPIC_API_KEY`. Compatible services require `--base-url`.
+
+Run `weapp-agent` for the terminal interface. Use `run --json` for automation, `--image` for references, and `resume SESSION_ID` to continue a task.
+
+## What gets verified
+
+Configured typecheck, build, test and DevTools commands produce separate results. Missing checks are unverified. Browser previews are not evidence of WeChat runtime correctness.
+
+Project trust allows local edits and configured checks. Arbitrary shell commands and unknown MCP actions need approval. This is tool-level permission control, not an operating system sandbox.
+
+Read the [CLI reference](/cli) and [architecture](/architecture).

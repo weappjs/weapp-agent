@@ -1,0 +1,51 @@
+{
+  "name": "@weappjs/mini-program",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Weapp Agent mini-program",
+  "license": "MIT",
+  "homepage": "https://agent.weapp.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weappjs/weapp-agent.git",
+    "directory": "packages/mini-program"
+  },
+  "bugs": {
+    "url": "https://github.com/weappjs/weapp-agent/issues"
+  },
+  "keywords": [
+    "repoctl",
+    "typescript",
+    "library",
+    "template"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {},
+  "engines": {
+    "node": ">=24.15.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.31.0",
+    "@weappjs/core": "workspace:*",
+    "execa": "10.0.1",
+    "zod": "4.6.5"
+  }
+}

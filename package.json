@@ -1,0 +1,73 @@
+{
+  "name": "weapp-agent-workspace",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@12.6.0",
+  "description": "Independent AI coding agent for WeChat mini-programs",
+  "author": "ice breaker <hi@sonofmagic.top>",
+  "license": "MIT",
+  "homepage": "https://agent.weapp.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weappjs/weapp-agent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/weappjs/weapp-agent/issues"
+  },
+  "keywords": [
+    "weapp",
+    "agent",
+    "weapp-vite",
+    "wechat",
+    "ai"
+  ],
+  "engines": {
+    "node": ">=24.15.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "pnpm --filter @weappjs/agent dev",
+    "test": "vitest run",
+    "lint": "eslint . && pnpm --filter @weappjs/docs lint:docs",
+    "typecheck": "turbo run typecheck",
+    "validate": "pnpm build && pnpm lint && pnpm typecheck && pnpm test && pnpm test:pack",
+    "test:pack": "node scripts/smoke-pack.mjs",
+    "test:live": "node scripts/live-models.mjs",
+    "test:devtools": "node scripts/devtools-smoke.mjs",
+    "repo:init": "repo init",
+    "repo:new": "repo new",
+    "repo:check": "repo check",
+    "repo:doctor": "repo doctor",
+    "prepare": "husky",
+    "docs:dev": "pnpm --filter @weappjs/docs dev",
+    "docs:deploy": "pnpm --filter @weappjs/docs deploy",
+    "test:fixtures": "node scripts/fixtures-smoke.mjs"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@eslint/config-inspector": "^3.5.0",
+    "@types/node": "^26.6.3",
+    "@types/react": "^19.2.0",
+    "@vitest/coverage-v8": "~5.0.2",
+    "eslint": "^10.11.0",
+    "execa": "^10.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "only-allow": "^1.2.2",
+    "repoctl": "^5.5.7",
+    "stylelint": "^17.15.0",
+    "tailwindcss": "^4.3.3",
+    "tsd": "^0.33.0",
+    "tsdown": "0.23.0",
+    "tsx": "^4.22.0",
+    "turbo": "^2.11.5",
+    "typescript": "^6.0.3",
+    "vitest": "~5.0.2",
+    "yaml": "^2.9.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

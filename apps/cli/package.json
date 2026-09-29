@@ -1,0 +1,65 @@
+{
+  "name": "@weappjs/agent",
+  "type": "module",
+  "version": "0.1.0-preview.1",
+  "private": false,
+  "description": "AI coding agent for WeChat mini-programs",
+  "author": "ice breaker <hi@sonofmagic.top>",
+  "license": "MIT",
+  "homepage": "https://agent.weapp.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weappjs/weapp-agent.git",
+    "directory": "apps/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/weappjs/weapp-agent/issues"
+  },
+  "keywords": [
+    "weapp",
+    "weapp-vite",
+    "wevu",
+    "agent",
+    "ai",
+    "cli"
+  ],
+  "bin": {
+    "weapp-agent": "./dist/index.mjs"
+  },
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "engines": {
+    "node": ">=24.15.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "4.0.68",
+    "@ai-sdk/openai": "4.0.81",
+    "@ai-sdk/openai-compatible": "3.0.59",
+    "@modelcontextprotocol/sdk": "1.31.0",
+    "ai": "7.0.122",
+    "commander": "15.0.0",
+    "diff": "9.0.0",
+    "execa": "10.0.1",
+    "ink": "7.1.1",
+    "ink-text-input": "6.0.0",
+    "react": "19.3.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@weappjs/core": "workspace:*",
+    "@weappjs/mini-program": "workspace:*",
+    "@weappjs/providers": "workspace:*",
+    "tsdown": "0.23.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
