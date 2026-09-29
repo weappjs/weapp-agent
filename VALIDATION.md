@@ -47,3 +47,5 @@ Reports and screenshots are generated under ignored `artifacts/`. No API keys, l
 ## Deployment compatibility
 
 Wrangler is pinned to 4.95.0. Wrangler 4.143.1 uploaded assets but failed its subsequent `/workers/workers/` lookup with code 10007 on this account. The pinned version successfully deployed the same site and bound its custom domain. GitHub Actions uses the organization Cloudflare secrets and the same lockfile.
+
+The static docs use normal page navigation with hover prefetch. Production browser testing found that the optional Astro client router did not remount the search dialog after navigating from the home page. Removing that optional router keeps search, theme and mobile navigation on a consistent document lifecycle.

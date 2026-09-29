@@ -3,7 +3,6 @@ import "@fontsource-variable/inter";
 import "@fontsource-variable/jetbrains-mono";
 import "../styles/globals.css";
 import "../styles/prose.css";
-import { ClientRouter } from "astro:transitions";
 import { config } from "virtual:nimbus/config";
 import {
   getCollectionLlmsUrl,
@@ -118,7 +117,6 @@ const resolvedMarkdownUrl =
       apiVersion={apiVersion}
       coordinate={coordinate}
     />
-    <ClientRouter />
   </head>
   <body class="min-h-screen bg-background text-foreground antialiased">
     <a
