@@ -221,11 +221,21 @@ export function fileTools(): Tool[] {
       schema: z.object({}).strict(),
       mutates: false,
       async execute(_input, ctx) {
+        // Git may execute configured clean/process filters even with textconv
+        // disabled. Override every effective filter before reading the worktree.
+        const filters = await execa('git', ['config', '--null', '--name-only', '--get-regexp', '^filter\\..*\\.(clean|smudge|process|required)$'], {
+          cwd: ctx.root,
+          cancelSignal: ctx.signal,
+          reject: false,
+        })
+        const gitConfig = ['-c', 'core.fsmonitor=false']
+        for (const key of filters.stdout.split('\0').filter(Boolean)) {
+          gitConfig.push('-c', `${key}=${key.endsWith('.required') ? 'false' : ''}`)
+        }
         const diff = await execa(
           'git',
           [
-            '-c',
-            'core.fsmonitor=false',
+            ...gitConfig,
             '--no-pager',
             'diff',
             '--no-ext-diff',
@@ -241,7 +251,7 @@ export function fileTools(): Tool[] {
           ],
           { cwd: ctx.root, cancelSignal: ctx.signal, reject: false },
         )
-        const status = await execa('git', ['-c', 'core.fsmonitor=false', 'status', '--short'], {
+        const status = await execa('git', [...gitConfig, 'status', '--short'], {
           cwd: ctx.root,
           cancelSignal: ctx.signal,
           reject: false,

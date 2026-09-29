@@ -127,14 +127,15 @@ it('invalidates the current in-memory authorization when disk configuration chan
   expect(await projectFingerprint(root, config)).not.toBe(before)
 })
 
-it('does not execute repository textconv commands while reading a Git diff', async () => {
+it('does not execute repository textconv or clean filter commands while reading a Git diff', async () => {
   await execa('git', ['init'], { cwd: root })
-  await writeFile(path.join(root, '.gitattributes'), '*.txt diff=probe\n')
+  await writeFile(path.join(root, '.gitattributes'), '*.txt diff=probe filter=probe\n')
   await writeFile(path.join(root, 'probe.cjs'), 'require(\'node:fs\').writeFileSync(\'unexpected-execution\', \'unsafe\')')
   await writeFile(path.join(root, 'page.txt'), 'before')
   await execa('git', ['add', '.gitattributes', 'page.txt'], { cwd: root })
   await execa('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.com', '-c', 'commit.gpgsign=false', 'commit', '-m', 'fixture'], { cwd: root })
   await execa('git', ['config', 'diff.probe.textconv', 'node probe.cjs'], { cwd: root })
+  await execa('git', ['config', 'filter.probe.clean', 'node probe.cjs'], { cwd: root })
   await writeFile(path.join(root, 'page.txt'), 'after')
   const diff = await fileTools().find(t => t.name === 'git_diff')!.execute({}, { ...ctx, trusted: false })
   expect(diff.text).toContain('+after')
