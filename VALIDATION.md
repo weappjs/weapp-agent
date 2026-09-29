@@ -43,3 +43,7 @@ Reports and screenshots are generated under ignored `artifacts/`. No API keys, l
 - Dynamic Vite configuration is inferred rather than executed; inspect `project_info` and its warnings.
 - Native fixture has no typecheck/test scripts; these categories remain unverified. Wevu's provided typecheck passed.
 - ESLint emits advisory execa replacement warnings; execa is retained for cancellation and cross-platform process behavior. Astro emits dependency bundling directive warnings; build, typecheck and browser checks passed.
+
+## Deployment compatibility
+
+Wrangler is pinned to 4.95.0. Wrangler 4.143.1 uploaded assets but failed its subsequent `/workers/workers/` lookup with code 10007 on this account. The pinned version successfully deployed the same site and bound its custom domain. GitHub Actions uses the organization Cloudflare secrets and the same lockfile.
