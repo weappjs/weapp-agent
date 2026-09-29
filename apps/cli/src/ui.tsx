@@ -3,7 +3,7 @@ import type {
   Approver,
   RunResult,
   SessionEvent,
-} from '@weappjs/core'
+} from '@weapp-agent/core'
 import { Box, render, Text, useApp, useInput } from 'ink'
 import TextInput from 'ink-text-input'
 import { useRef, useState } from 'react'

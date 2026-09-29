@@ -3,13 +3,13 @@ import type {
   Tool,
   ToolContext,
   VerificationCommand,
-} from '@weappjs/core'
+} from '@weapp-agent/core'
 import {
   authorize,
   bounded,
   projectFingerprint,
   requireTrust,
-} from '@weappjs/core'
+} from '@weapp-agent/core'
 import { execa } from 'execa'
 import { z } from 'zod'
 

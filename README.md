@@ -15,7 +15,7 @@
 从 npm 安装预览版：
 
 ```bash
-npm install --global weapp-agent@preview
+npm install --global @weapp-agent/cli@preview
 weapp-agent --version
 ```
 
@@ -28,7 +28,7 @@ corepack enable
 pnpm install
 pnpm build
 node apps/cli/dist/index.mjs --help
-pnpm --filter weapp-agent pack --pack-destination ../../artifacts
+pnpm --filter @weapp-agent/cli pack --pack-destination ../../artifacts
 ```
 
 将生成的 `.tgz` 安装到全局，或直接通过 `node` 调用构建入口。

@@ -4,7 +4,7 @@ import type {
   McpConfig,
   Tool,
   ToolContext,
-} from '@weappjs/core'
+} from '@weapp-agent/core'
 import process from 'node:process'
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
@@ -14,7 +14,7 @@ import {
   bounded,
   projectFingerprint,
   safePath,
-} from '@weappjs/core'
+} from '@weapp-agent/core'
 import { z } from 'zod'
 
 const projectRuntime = new Set([

@@ -4,7 +4,7 @@ import type {
   ModelAdapter,
   ModelChunk,
   ModelRequest,
-} from '@weappjs/core'
+} from '@weapp-agent/core'
 import type { LanguageModel, ModelMessage, ToolSet } from 'ai'
 import process from 'node:process'
 import { createAnthropic } from '@ai-sdk/anthropic'

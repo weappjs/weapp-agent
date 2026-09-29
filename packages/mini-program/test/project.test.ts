@@ -2,7 +2,7 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
-import { configSchema, projectFingerprint } from '@weappjs/core'
+import { configSchema, projectFingerprint } from '@weapp-agent/core'
 import { afterEach, beforeEach, expect, it } from 'vitest'
 import {
   defaultVerification,

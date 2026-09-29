@@ -1,5 +1,5 @@
 {
-  "name": "weapp-agent",
+  "name": "@weapp-agent/cli",
   "type": "module",
   "version": "0.1.0-preview.1",
   "private": false,
@@ -54,9 +54,9 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
-    "@weappjs/core": "workspace:*",
-    "@weappjs/mini-program": "workspace:*",
-    "@weappjs/providers": "workspace:*",
+    "@weapp-agent/core": "workspace:*",
+    "@weapp-agent/mini-program": "workspace:*",
+    "@weapp-agent/providers": "workspace:*",
     "tsdown": "0.23.0"
   },
   "publishConfig": {

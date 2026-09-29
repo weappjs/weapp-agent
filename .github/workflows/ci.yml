@@ -53,8 +53,8 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @weappjs/docs build
-      - run: pnpm --filter @weappjs/docs exec wrangler deploy
+      - run: pnpm --filter @weapp-agent/docs build
+      - run: pnpm --filter @weapp-agent/docs exec wrangler deploy
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

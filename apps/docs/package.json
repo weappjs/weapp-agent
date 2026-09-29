@@ -1,5 +1,5 @@
 {
-  "name": "@weappjs/docs",
+  "name": "@weapp-agent/docs",
   "version": "0.0.1",
   "private": true,
   "type": "module",

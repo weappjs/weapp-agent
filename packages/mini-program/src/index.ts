@@ -3,7 +3,7 @@ import type {
   ProjectAdapter,
   ProjectInfo,
   Tool,
-} from '@weappjs/core'
+} from '@weapp-agent/core'
 import path from 'node:path'
 import process from 'node:process'
 import { z } from 'zod'

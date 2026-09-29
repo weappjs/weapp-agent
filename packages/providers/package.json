@@ -1,5 +1,5 @@
 {
-  "name": "@weappjs/providers",
+  "name": "@weapp-agent/providers",
   "type": "module",
   "version": "0.0.0",
   "private": true,
@@ -46,7 +46,7 @@
     "@ai-sdk/anthropic": "4.0.68",
     "@ai-sdk/openai": "4.0.81",
     "@ai-sdk/openai-compatible": "3.0.59",
-    "@weappjs/core": "workspace:*",
+    "@weapp-agent/core": "workspace:*",
     "ai": "7.0.122"
   }
 }

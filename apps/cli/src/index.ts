@@ -4,8 +4,8 @@ import type {
   ImageInput,
   SessionEvent,
   ToolContext,
-} from '@weappjs/core'
-import type { McpConnection } from '@weappjs/mini-program'
+} from '@weapp-agent/core'
+import type { McpConnection } from '@weapp-agent/mini-program'
 import { Buffer } from 'node:buffer'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
@@ -23,7 +23,7 @@ import {
   Session,
   stateRoot,
   trustProject,
-} from '@weappjs/core'
+} from '@weapp-agent/core'
 import {
   builtinMcp,
   connectMcp,
@@ -34,8 +34,8 @@ import {
   verificationTool,
   verifyProject,
   WeappProjectAdapter,
-} from '@weappjs/mini-program'
-import { apiKeyVariable, createModel } from '@weappjs/providers'
+} from '@weapp-agent/mini-program'
+import { apiKeyVariable, createModel } from '@weapp-agent/providers'
 import { Command, Option } from 'commander'
 import { execa } from 'execa'
 import { eventText, interactive } from './ui.js'

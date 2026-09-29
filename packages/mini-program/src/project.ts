@@ -1,7 +1,7 @@
-import type { ProjectInfo, VerificationCommand } from '@weappjs/core'
+import type { ProjectInfo, VerificationCommand } from '@weapp-agent/core'
 import { access, readdir, readFile, realpath } from 'node:fs/promises'
 import path from 'node:path'
-import { bounded, safePath } from '@weappjs/core'
+import { bounded, safePath } from '@weapp-agent/core'
 
 async function json(file: string): Promise<Record<string, any>> {
   try {

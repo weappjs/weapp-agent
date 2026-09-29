@@ -12,7 +12,7 @@ sidebar:
 从 npm 安装预览版：
 
 ```sh
-npm install --global weapp-agent@preview
+npm install --global @weapp-agent/cli@preview
 ```
 
 ```bash
@@ -27,7 +27,7 @@ cd weapp-agent
 corepack enable
 pnpm install
 pnpm build
-pnpm --filter weapp-agent pack --pack-destination ../../artifacts
+pnpm --filter @weapp-agent/cli pack --pack-destination ../../artifacts
 ```
 
 将打包生成的 `.tgz` 安装到全局后即可使用 `weapp-agent`。在仓库中也可以直接运行 `node apps/cli/dist/index.mjs --help`。

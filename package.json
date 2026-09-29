@@ -27,9 +27,9 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "dev": "pnpm --filter weapp-agent dev",
+    "dev": "pnpm --filter @weapp-agent/cli dev",
     "test": "vitest run",
-    "lint": "eslint . && pnpm --filter @weappjs/docs lint:docs",
+    "lint": "eslint . && pnpm --filter @weapp-agent/docs lint:docs",
     "typecheck": "turbo run typecheck",
     "validate": "pnpm build && pnpm lint && pnpm typecheck && pnpm test && pnpm test:pack",
     "test:pack": "node scripts/smoke-pack.mjs",
@@ -40,8 +40,8 @@
     "repo:check": "repo check",
     "repo:doctor": "repo doctor",
     "prepare": "husky",
-    "docs:dev": "pnpm --filter @weappjs/docs dev",
-    "docs:deploy": "pnpm --filter @weappjs/docs deploy",
+    "docs:dev": "pnpm --filter @weapp-agent/docs dev",
+    "docs:deploy": "pnpm --filter @weapp-agent/docs deploy",
     "test:fixtures": "node scripts/fixtures-smoke.mjs"
   },
   "devDependencies": {
