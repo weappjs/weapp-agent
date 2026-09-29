@@ -9,20 +9,20 @@ An independent AI coding agent for WeChat mini-programs. Built for weapp-vite na
 Download the `.tgz` from [GitHub Releases](https://github.com/weappjs/weapp-agent/releases), then run:
 
 ```sh
-npm install --global ./weappjs-agent-0.1.0-preview.1.tgz
+npm install --global weapp-agent@preview
 weapp-agent --version
 ```
 
 ## Source preview
 
-Requires Node.js 24.15+ and pnpm. The npm package is not published yet.
+Requires Node.js 24.15+ and pnpm.
 
 ```bash
 corepack enable
 pnpm install
 pnpm build
 node apps/cli/dist/index.mjs --help
-pnpm --filter @weappjs/agent pack --pack-destination ../../artifacts
+pnpm --filter weapp-agent pack --pack-destination ../../artifacts
 ```
 
 Install the generated tarball to use `weapp-agent` globally. In a mini-program project:

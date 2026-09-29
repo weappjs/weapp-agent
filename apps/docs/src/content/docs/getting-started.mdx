@@ -7,12 +7,15 @@ sidebar:
 
 ## 安装
 
-当前为源码预览版，尚未发布到 npm。需要 Node.js 24.15+ 和 pnpm。
+当前为源码预览版，需要 Node.js 24.15+ 和 pnpm。
 
-从 [GitHub Releases](https://github.com/weappjs/weapp-agent/releases) 下载预览压缩包：
+从 npm 安装预览版：
+
+```sh
+npm install --global weapp-agent@preview
+```
 
 ```bash
-npm install --global ./weappjs-agent-0.1.0-preview.1.tgz
 weapp-agent --version
 ```
 
@@ -24,7 +27,7 @@ cd weapp-agent
 corepack enable
 pnpm install
 pnpm build
-pnpm --filter @weappjs/agent pack --pack-destination ../../artifacts
+pnpm --filter weapp-agent pack --pack-destination ../../artifacts
 ```
 
 将打包生成的 `.tgz` 安装到全局后即可使用 `weapp-agent`。在仓库中也可以直接运行 `node apps/cli/dist/index.mjs --help`。

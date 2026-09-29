@@ -7,16 +7,19 @@ sidebar:
 
 ## Install the preview
 
-Download the tarball from [GitHub Releases](https://github.com/weappjs/weapp-agent/releases):
+Install the preview package from npm:
 
 ```sh
-npm install --global ./weappjs-agent-0.1.0-preview.1.tgz
+npm install --global weapp-agent@preview
+```
+
+```sh
 weapp-agent --version
 ```
 
 ## Build from source
 
-Weapp Agent is an early source preview. It is not published to npm yet. Use Node.js 24.15 or newer and pnpm.
+Weapp Agent is an early source preview. Use Node.js 24.15 or newer and pnpm.
 
 ```bash
 git clone https://github.com/weappjs/weapp-agent.git
@@ -27,7 +30,7 @@ pnpm build
 node apps/cli/dist/index.mjs --help
 ```
 
-Pack `@weappjs/agent` and install the generated tarball to use the `weapp-agent` command globally.
+From a checkout, you can also pack and install the local CLI with `pnpm --filter weapp-agent pack`.
 
 ## Configure a project
 

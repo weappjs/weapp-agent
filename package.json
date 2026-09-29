@@ -27,7 +27,7 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "dev": "pnpm --filter @weappjs/agent dev",
+    "dev": "pnpm --filter weapp-agent dev",
     "test": "vitest run",
     "lint": "eslint . && pnpm --filter @weappjs/docs lint:docs",
     "typecheck": "turbo run typecheck",
