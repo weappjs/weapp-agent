@@ -28,7 +28,8 @@
   },
   "files": [
     "README.md",
-    "dist"
+    "dist",
+    "skills"
   ],
   "engines": {
     "node": ">=24.15.0"

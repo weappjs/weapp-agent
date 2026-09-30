@@ -1,6 +1,6 @@
 # Weapp Agent
 
-An independent AI coding agent for WeChat mini-programs. Built for weapp-vite native and Wevu projects, with inspectable edits, local sessions and explicit verification results.
+A delivery capability layer for weapp-vite native and Wevu WeChat projects. Let your existing AI host edit code while Weapp Agent runs deterministic acceptance and returns source-bound evidence. Independent model-backed CLI mode remains available.
 
 [Documentation](https://agent.weapp.dev/en/quickstart) · [中文](README.md)
 
@@ -32,6 +32,23 @@ weapp-agent init --provider openai --model YOUR_MODEL
 # Set OPENAI_API_KEY in your terminal environment.
 weapp-agent --trust run "Add a counter to the home page and verify it"
 ```
+
+## Model-free host integration (source preview)
+
+Build/install this checkout to use the new commands; this change has not been published to npm.
+
+```sh
+weapp-agent init
+weapp-agent doctor --json
+# After reviewing scripts, configuration and scenarios:
+weapp-agent --trust accept --json
+weapp-agent -C /absolute/path/to/project mcp
+weapp-agent skill .agents/skills/weapp-acceptance
+```
+
+Configure `acceptance.scenarios` with deterministic route/find/input/tap/wait/assert/screenshot steps. By default both build and DevTools evidence are required; missing runtime evidence cannot pass. The five MCP tools inspect the project, start/query/cancel tasks and read reports/artifacts. Version 2 reports distinguish failed, unverified, blocked, cancelled, timed-out and interrupted execution and recheck source freshness when read. No additional model key is needed. Legacy `verify` output remains compatible.
+
+See the [acceptance guide](apps/docs/src/content/docs/acceptance.mdx), [bundled Skill](apps/cli/skills/weapp-acceptance/SKILL.md) and [counter scenario](examples/acceptance/counter.json).
 
 Supports OpenAI, Anthropic and compatible endpoints; streaming terminal conversations, reference images, tool approvals, JSON events, persistent sessions, conflict-aware editing, project verification, and stdio/HTTP MCP.
 

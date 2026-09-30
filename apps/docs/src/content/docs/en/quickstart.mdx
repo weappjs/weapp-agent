@@ -51,3 +51,9 @@ Configured typecheck, build, test and DevTools commands produce separate results
 Project trust allows local edits and configured checks. Arbitrary shell commands and unknown MCP actions need approval. This is tool-level permission control, not an operating system sandbox.
 
 Read the [CLI reference](/cli) and [architecture](/architecture).
+
+## Use your existing AI host
+
+This checkout also provides model-free acceptance. Run `weapp-agent init` without a model, inspect with `doctor --json`, configure `acceptance.scenarios`, then review and authorize `weapp-agent --trust accept --json`. Start `weapp-agent -C /absolute/project mcp` for the five project/acceptance tools. Install the bundled Skill into a new folder with `weapp-agent skill .agents/skills/weapp-acceptance`.
+
+Version 2 reports require all declared checks to pass and evidence to remain current. Missing runtime evidence is unverified, screenshots are not visual assertions, and DevTools is not a physical device. Independent run/resume still require model configuration. These new commands require the package built from this checkout until its release is published. See the [acceptance guide](/acceptance).

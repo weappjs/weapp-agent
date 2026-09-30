@@ -1,5 +1,5 @@
 import type {
-  AgentConfig,
+  ProjectConfig,
   Tool,
   ToolContext,
   VerificationCommand,
@@ -18,6 +18,7 @@ export interface CheckResult {
   status: 'passed' | 'failed' | 'unverified'
   command?: string
   exitCode?: number
+  timedOut?: boolean
   output: string
 }
 export interface VerificationReport {
@@ -25,13 +26,15 @@ export interface VerificationReport {
   checks: CheckResult[]
 }
 export async function verifyProject(
-  config: AgentConfig,
+  config: ProjectConfig,
   context: ToolContext,
   originalFingerprint: string,
+  onCheck?: (check: CheckResult) => Promise<void>,
+  skipKinds: CheckResult['kind'][] = [],
 ): Promise<VerificationReport> {
   await requireTrust(context)
   const checks: CheckResult[] = []
-  for (const command of config.verification) {
+  for (const command of config.verification.filter(c => !skipKinds.includes(c.kind))) {
     context.signal.throwIfAborted()
     const current = await projectFingerprint(context.root, config)
     if (
@@ -55,13 +58,16 @@ export async function verifyProject(
       reject: false,
       maxBuffer: 2_000_000,
     })
+    context.signal.throwIfAborted()
     checks.push({
       kind: command.kind,
       status: result.exitCode === 0 ? 'passed' : 'failed',
       command: `${command.command} ${command.args.join(' ')}`,
       exitCode: result.exitCode,
-      output: bounded(`${result.stdout}\n${result.stderr}`),
+      ...(result.timedOut ? { timedOut: true } : {}),
+      output: bounded(result.timedOut ? `Verification command timed out after ${command.timeoutMs}ms.\n${result.stdout}\n${result.stderr}` : `${result.stdout}\n${result.stderr}`),
     })
+    await onCheck?.(checks[checks.length - 1]!)
   }
   for (const kind of ['typecheck', 'build', 'test', 'devtools'] as const) {
     if (!checks.some(c => c.kind === kind)) {
@@ -83,7 +89,7 @@ export async function verifyProject(
   }
 }
 export function verificationTool(
-  config: AgentConfig,
+  config: ProjectConfig,
   fingerprint: string,
 ): Tool {
   return {

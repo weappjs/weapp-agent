@@ -5,6 +5,12 @@ sidebar:
   order: 8
 ---
 
+## 对外验收服务
+
+使用 `weapp-agent -C /path/to/project mcp` 向 Codex 等宿主提供工程检查和验收任务。这个入口不调用模型，具体配置见[接入与验收](/acceptance)。
+
+下面介绍的是独立 agent 模式消费项目工具的 MCP client，与对外服务方向不同。
+
 ## 自动发现
 
 可信的 weapp-vite 项目会尝试启动本地 CLI 的 MCP 服务：

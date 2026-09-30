@@ -1,10 +1,10 @@
 # Weapp Agent
 
-**从一句需求，到可验证的小程序改动。**
+**让 AI 写完的小程序代码，更容易被验证和交付。**
 
 [文档](https://agent.weapp.dev) · [English](README.en.md) · [贡献指南](CONTRIBUTING.md)
 
-面向微信小程序的独立 AI CLI。支持 weapp-vite 原生与 Wevu 项目，使用自己的模型和 API Key，在本机完成读取、编辑、构建、测试与开发者工具交互。
+面向 weapp-vite 原生与 Wevu 微信项目的交付能力层。通过 MCP 和 CLI 为 Codex 等宿主提供工程诊断、确定性验收与截图日志，不需要第二个模型或 API Key。保留独立 AI CLI 模式。
 
 ## 当前状态
 
@@ -33,7 +33,7 @@ pnpm --filter @weapp-agent/cli pack --pack-destination ../../artifacts
 
 将生成的 `.tgz` 安装到全局，或直接通过 `node` 调用构建入口。
 
-在已有小程序项目中：
+使用已有 AI 宿主时，先阅读[无模型接入指南](apps/docs/src/content/docs/acceptance.mdx)。以下命令用于独立 agent 模式：
 
 ```bash
 weapp-agent init --provider openai --model YOUR_MODEL
@@ -51,6 +51,23 @@ cd my-miniapp
 pnpm install
 weapp-agent --trust
 ```
+
+## 在现有 AI 工具中验收
+
+以下新入口需要包含本次改动的构建包，尚未发布到 npm：
+
+```bash
+weapp-agent init
+weapp-agent doctor --json
+# 审阅项目脚本、配置与场景后
+weapp-agent --trust accept --json
+weapp-agent -C /absolute/path/to/project mcp
+weapp-agent skill .agents/skills/weapp-acceptance
+```
+
+在配置的 `acceptance.scenarios` 中列出场景 JSON 文件。默认要求 build 和 devtools 都通过；缺少场景返回未验证。MCP 提供 inspect/start/status/cancel/report 五类操作，宿主负责代码修改和修复。新报告为 version 2，绑定源码摘要，支持取消和中断识别，报告不会自动重放交互。旧 `verify` 输出继续兼容。
+
+[接入、场景格式与排错](apps/docs/src/content/docs/acceptance.mdx) · [计数器场景](examples/acceptance/counter.json) · [实施状态与发布门槛](ROADMAP.md) · [对照评测](benchmarks/README.md)
 
 ## 工作方式
 

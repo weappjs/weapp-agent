@@ -1,17 +1,17 @@
 import type {
-  AgentConfig,
   ProjectAdapter,
   ProjectInfo,
   Tool,
 } from '@weapp-agent/core'
-import path from 'node:path'
-import process from 'node:process'
 import { z } from 'zod'
-import { detectProject, exists, projectInstructions } from './project.js'
+import { detectProject, projectInstructions } from './project.js'
 
+export * from './acceptance.js'
 export * from './mcp.js'
 export * from './project.js'
-export * from './verify.js'
+export * from './runtime.js'
+export * from './scenario.js'
+export * from './server.js'
 
 export class WeappProjectAdapter implements ProjectAdapter {
   detect = detectProject
@@ -33,17 +33,4 @@ export class WeappProjectAdapter implements ProjectAdapter {
     ]
   }
 }
-export async function builtinMcp(
-  root: string,
-): Promise<AgentConfig['mcp'][number] | undefined> {
-  const bin = path.join(root, 'node_modules/weapp-vite/bin/weapp-vite.js')
-  if (!(await exists(bin))) {
-    return undefined
-  }
-  return {
-    name: 'weapp',
-    transport: 'stdio',
-    command: process.execPath,
-    args: [bin, 'mcp', '--workspace-root', root],
-  }
-}
+export * from './verify.js'

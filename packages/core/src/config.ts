@@ -4,6 +4,7 @@ import { homedir } from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
 import { z } from 'zod'
+import { safePath } from './security.js'
 
 export const verificationSchema = z.strictObject({
   kind: z.enum(['typecheck', 'build', 'test', 'devtools']),
@@ -25,38 +26,56 @@ export const mcpSchema = z.discriminatedUnion('transport', [
     tokenEnv: z.string().optional(),
   }),
 ])
-export const configSchema = z.strictObject({
+const modelSchema = z.strictObject({
+  provider: z.enum(['openai', 'anthropic', 'openai-compatible']),
+  name: z.string().min(1),
+  baseURL: z.url().optional(),
+  apiKeyEnv: z
+    .string()
+    .regex(/^[A-Z_][A-Z0-9_]*$/)
+    .optional(),
+})
+export const projectConfigSchema = z.strictObject({
   version: z.literal(1).default(1),
-  model: z.strictObject({
-    provider: z.enum(['openai', 'anthropic', 'openai-compatible']),
-    name: z.string().min(1),
-    baseURL: z.url().optional(),
-    apiKeyEnv: z
-      .string()
-      .regex(/^[A-Z_][A-Z0-9_]*$/)
-      .optional(),
-  }),
+  model: modelSchema.optional(),
   maxSteps: z.number().int().min(1).max(500).default(40),
   timeoutMs: z.number().int().positive().default(600_000),
   contextCharacters: z.number().int().min(8000).default(100_000),
   verification: z.array(verificationSchema).default([]),
   mcp: z.array(mcpSchema).default([]),
+  acceptance: z.strictObject({
+    requiredChecks: z.array(z.enum(['typecheck', 'build', 'test', 'devtools'])).min(1).default(['build', 'devtools']),
+    scenarios: z.array(z.string().min(1)).max(100).default([]),
+    timeoutMs: z.number().int().min(100).max(1_800_000).default(600_000),
+  }).default({ requiredChecks: ['build', 'devtools'], scenarios: [], timeoutMs: 600_000 }),
 })
+export const configSchema = projectConfigSchema.extend({ model: modelSchema })
+export type ProjectConfig = z.infer<typeof projectConfigSchema>
 export type AgentConfig = z.infer<typeof configSchema>
 export type VerificationCommand = z.infer<typeof verificationSchema>
 export type McpConfig = z.infer<typeof mcpSchema>
 export const configFilename = 'weapp-agent.config.json'
-export async function loadConfig(root: string): Promise<AgentConfig> {
+export async function loadProjectConfig(root: string): Promise<ProjectConfig> {
   let raw: string
   try {
     raw = await readFile(path.join(root, configFilename), 'utf8')
   }
-  catch {
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+      throw error
+    }
     throw new Error(
-      `Missing ${configFilename}. Run weapp-agent init --provider openai --model <model>.`,
+      `Missing ${configFilename}. Run weapp-agent init; add --model <model> only for independent agent mode.`,
     )
   }
-  return configSchema.parse(JSON.parse(raw))
+  return projectConfigSchema.parse(JSON.parse(raw))
+}
+export async function loadConfig(root: string): Promise<AgentConfig> {
+  const config = await loadProjectConfig(root)
+  if (!config.model) {
+    throw new Error('Agent mode requires model configuration. Set model.provider and model.name in weapp-agent.config.json. Acceptance and MCP do not require a model.')
+  }
+  return configSchema.parse(config)
 }
 export function hash(value: string): string {
   return createHash('sha256').update(value).digest('hex')
@@ -69,7 +88,7 @@ export function stateRoot(): string {
 }
 export async function projectFingerprint(
   root: string,
-  config: AgentConfig,
+  config: ProjectConfig,
 ): Promise<string> {
   let pkg = ''
   try {
@@ -85,7 +104,31 @@ export async function projectFingerprint(
   catch {
     /* Programmatic callers may supply configuration without a file. */
   }
-  return hash(JSON.stringify({ root, config, pkg, diskConfig }))
+  const scenarios: Array<[string, string]> = []
+  for (const file of config.acceptance.scenarios) {
+    const target = await safePath(root, file)
+    try {
+      scenarios.push([file, await readFile(target, 'utf8')])
+    }
+    catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+        throw error
+      }
+      scenarios.push([file, '<missing>'])
+    }
+  }
+  const projectFiles: Array<[string, string]> = []
+  for (const file of ['project.config.json', 'vite.config.ts', 'vite.config.js', 'vite.config.mts', 'vite.config.mjs', 'vite.config.cts', 'vite.config.cjs', 'pnpm-workspace.yaml', 'pnpm-lock.yaml', 'package-lock.json', 'yarn.lock', 'bun.lock']) {
+    try {
+      projectFiles.push([file, hash(await readFile(await safePath(root, file), 'utf8'))])
+    }
+    catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+        throw error
+      }
+    }
+  }
+  return hash(JSON.stringify({ root, config, pkg, diskConfig, scenarios, projectFiles }))
 }
 export async function isTrusted(
   root: string,

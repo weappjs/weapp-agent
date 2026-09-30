@@ -1,7 +1,7 @@
 import type {
-  AgentConfig,
   ImageInput,
   McpConfig,
+  ProjectConfig,
   Tool,
   ToolContext,
 } from '@weapp-agent/core'
@@ -47,7 +47,7 @@ export interface McpConnection {
 export async function connectMcp(
   server: McpConfig,
   context: ToolContext,
-  options?: { config: AgentConfig, fingerprint: string, builtin?: boolean },
+  options?: { config: ProjectConfig, fingerprint: string, builtin?: boolean },
 ): Promise<McpConnection> {
   const unchanged
     = options

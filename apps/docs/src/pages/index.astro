@@ -3,16 +3,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 export const prerender = true;
 ---
-<BaseLayout title="Weapp Agent · 让需求走进小程序" description="理解项目，编写代码，在微信运行时验证。面向 weapp-vite 的独立 AI 开发助手。">
+<BaseLayout title="Weapp Agent · 让需求走进小程序" description="为 AI 工具提供小程序工程诊断、运行验收和交付证据。">
   <Header showSidebar={false} />
   <main id="main-content" tabindex="-1" class="wa-home" data-pagefind-body>
     <div class="wa-kicker"><span class="wa-mark" aria-hidden="true">w_</span><span>WEAPPJS / DEVELOPER TOOLS</span><span class="wa-version">EARLY PREVIEW</span></div>
     <section class="wa-hero">
       <div class="wa-intro">
-        <p class="wa-eyebrow">你的项目，你的模型，你的开发节奏。</p>
+        <p class="wa-eyebrow">沿用你的 AI 工具，把小程序改动验清楚。</p>
         <h1>让需求<br />走进<span>小程序。</span></h1>
-        <p class="wa-description">在终端描述想做的事。Weapp Agent 理解项目、修改代码，再把构建、测试和运行结果带回来。</p>
-        <div class="wa-actions"><a class="wa-primary" href="/getting-started">开始使用 <span aria-hidden="true">↗</span></a><a class="wa-secondary" href="/workflow">看看它怎么工作 <span aria-hidden="true">→</span></a></div>
+        <p class="wa-description">在 Codex 等工具中完成改动，再用 Weapp Agent 执行构建和微信运行场景，带回断言、截图与日志。</p>
+        <div class="wa-actions"><a class="wa-primary" href="/acceptance">接入验收 <span aria-hidden="true">↗</span></a><a class="wa-secondary" href="/workflow">看看它怎么工作 <span aria-hidden="true">→</span></a></div>
         <p class="wa-platform">微信小程序 · weapp-vite · 原生 / Wevu</p>
       </div>
       <div class="wa-terminal" aria-label="开发流程示例，不代表实际执行记录">
@@ -33,9 +33,9 @@ export const prerender = true;
     <section class="wa-principles" aria-label="产品能力">
       <article><span class="wa-caption">从现有项目开始</span><h2>沿用你的技术栈</h2><p>识别页面、分包和工程脚本，遵循项目里的 AGENTS.md。新项目使用官方 weapp-vite 模板。</p><a href="/projects">项目接入 →</a></article>
       <article><span class="wa-caption">把执行过程摊开</span><h2>每一步都有记录</h2><p>查看工具调用和代码差异。中断后恢复会话，先核对执行状态，再继续工作。</p><a href="/sessions">会话与恢复 →</a></article>
-      <article><span class="wa-caption">选择适合的模型</span><h2>引擎保持独立</h2><p>支持 OpenAI、Anthropic 和兼容接口。使用自己的 API Key，在本地完成开发操作。</p><a href="/models">配置模型 →</a></article>
+      <article><span class="wa-caption">沿用熟悉的 AI 工具</span><h2>接入现有工作流</h2><p>通过 MCP 和 CLI 提供验收能力，无需额外模型 Key。也保留独立 agent 模式。</p><a href="/acceptance">接入验收 →</a></article>
     </section>
-    <section class="wa-reading"><div><span class="wa-caption">先跑通一次真实的改动</span><h2>从一个页面开始。</h2><p>安装 CLI，连接模型，再给它一个明确的小任务。</p></div><a class="wa-primary" href="/getting-started">阅读快速开始 ↗</a></section>
+    <section class="wa-reading"><div><span class="wa-caption">先跑通一次真实的改动</span><h2>从一个页面开始。</h2><p>检查项目，添加一个运行场景，拿到第一份验收报告。</p></div><a class="wa-primary" href="/acceptance">阅读接入指南 ↗</a></section>
     <footer class="wa-footer"><span>WEAPP AGENT / WEAPPJS</span><nav aria-label="页脚"><a href="https://github.com/weappjs/weapp-agent">GitHub</a><a href="/architecture">架构</a><a href="/llms.txt">给 AI 的文档</a><a href="/en/quickstart">English</a></nav><span>开源 · MIT</span></footer>
   </main>
 </BaseLayout>

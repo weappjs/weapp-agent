@@ -1,5 +1,4 @@
 import type {
-  AgentConfig,
   Approver,
   ImageInput,
   SessionEvent,
@@ -7,7 +6,7 @@ import type {
 } from '@weapp-agent/core'
 import type { McpConnection } from '@weapp-agent/mini-program'
 import { Buffer } from 'node:buffer'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { cp, mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { createInterface } from 'node:readline/promises'
@@ -17,6 +16,7 @@ import {
   fileTools,
   isTrusted,
   loadConfig,
+  projectConfigSchema,
   projectFingerprint,
   redactor,
   runAgent,
@@ -25,12 +25,15 @@ import {
   trustProject,
 } from '@weapp-agent/core'
 import {
+  AcceptanceService,
   builtinMcp,
   connectMcp,
   defaultVerification,
   detectProject,
   exists,
   findProjectRoot,
+  resolveProjectConfig,
+  serveAcceptanceMcp,
   verificationTool,
   verifyProject,
   WeappProjectAdapter,
@@ -79,8 +82,9 @@ async function configAndTrust(
   root: string,
   options: { trust?: boolean, json?: boolean },
   approver: Approver,
+  agent = true,
 ) {
-  const config = await loadConfig(root)
+  const config = agent ? await loadConfig(root) : await resolveProjectConfig(root)
   const fingerprint = await projectFingerprint(root, config)
   let trusted = await isTrusted(root, fingerprint)
   if (options.trust) {
@@ -136,7 +140,8 @@ async function execute(
     options,
     selectedApprover,
   )
-  const model = createModel(config.model)
+  const agentConfig = configSchema.parse(config)
+  const model = createModel(agentConfig.model)
   const adapter = new WeappProjectAdapter()
   const project = await adapter.detect(root)
   const abort = new AbortController()
@@ -185,7 +190,7 @@ async function execute(
     const attached = await images(options.image ?? [])
     return await runAgent({
       root,
-      config,
+      config: agentConfig,
       model,
       tools,
       prompt,
@@ -248,7 +253,7 @@ program
       .choices(['openai', 'anthropic', 'openai-compatible'])
       .default('openai'),
   )
-  .requiredOption(
+  .option(
     '--model <model>',
     'model identifier; no hard-coded model default',
   )
@@ -279,13 +284,15 @@ program
       await mkdir(root, { recursive: true })
     }
     const project = await detectProject(root)
-    const config = configSchema.parse({
-      model: {
-        provider: local.provider,
-        name: local.model,
-        baseURL: local.baseUrl,
-        apiKeyEnv: local.apiKeyEnv,
-      },
+    const config = projectConfigSchema.parse({
+      model: local.model
+        ? {
+            provider: local.provider,
+            name: local.model,
+            baseURL: local.baseUrl,
+            apiKeyEnv: local.apiKeyEnv,
+          }
+        : undefined,
       verification: defaultVerification(project),
     })
     await writeFile(
@@ -298,7 +305,7 @@ program
         status: 'created',
         root,
         config: configFilename,
-        next: `Set ${apiKeyVariable(config.model)}, install project dependencies, then run weapp-agent --trust.`,
+        next: config.model ? `Set ${apiKeyVariable(config.model)}, install project dependencies, then run weapp-agent --trust.` : 'Review project scripts, then run weapp-agent --trust accept. Configure acceptance.scenarios for runtime checks. No model key is required.',
       },
       opts.json,
     )
@@ -353,34 +360,19 @@ program
   .action(async (_local, command) => {
     const opts = command.optsWithGlobals()
     const root = await findProjectRoot(opts.cwd)
-    const project = await detectProject(root)
-    let config: AgentConfig | undefined
-    let configError: string | undefined
+    const service = await AcceptanceService.create(root)
     try {
-      config = await loadConfig(root)
+      const config = await resolveProjectConfig(root)
+      output({
+        ...await service.inspect(),
+        node: process.version,
+        config: await exists(path.join(root, configFilename)) ? 'valid' : 'inferred',
+        apiKey: config.model ? { variable: apiKeyVariable(config.model), present: Boolean(process.env[apiKeyVariable(config.model)]) } : null,
+        stateDirectory: stateRoot(),
+      }, opts.json)
     }
-    catch (error) {
-      configError = String(error)
-    }
-    const key = config ? apiKeyVariable(config.model) : undefined
-    const result = {
-      root,
-      node: process.version,
-      project,
-      config: config ? 'valid' : configError,
-      apiKey: key
-        ? { variable: key, present: Boolean(process.env[key]) }
-        : null,
-      localMcp: Boolean(await builtinMcp(root)),
-      stateDirectory: stateRoot(),
-      devtools: 'unverified: use a real DevTools verification command',
-      trusted: config
-        ? await isTrusted(root, await projectFingerprint(root, config))
-        : false,
-    }
-    output(result, opts.json)
-    if (!config) {
-      process.exitCode = 1
+    finally {
+      await service.close()
     }
   })
 program
@@ -393,6 +385,7 @@ program
       root,
       opts,
       approve,
+      false,
     )
     const abort = new AbortController()
     const stop = () => abort.abort()
@@ -417,6 +410,78 @@ program
       process.removeListener('SIGINT', stop)
     }
   })
+program
+  .command('skill')
+  .description('Copy the bundled acceptance skill into a new directory you choose')
+  .argument('<directory>', 'new skill directory, for example .agents/skills/weapp-acceptance')
+  .action(async (directory, _local, command) => {
+    const opts = command.optsWithGlobals()
+    const target = path.resolve(opts.cwd, directory)
+    await mkdir(path.dirname(target), { recursive: true })
+    await mkdir(target)
+    const source = new URL('../skills/weapp-acceptance/', import.meta.url)
+    for (const entry of await readdir(source)) {
+      await cp(new URL(entry, source), path.join(target, entry), { recursive: true, force: false, errorOnExist: true })
+    }
+    output({ status: 'installed', directory: target }, opts.json)
+  })
+program
+  .command('accept')
+  .description('Run version 2 acceptance without a model; missing required evidence never passes')
+  .action(async (_local, command) => {
+    const opts = command.optsWithGlobals()
+    const service = await AcceptanceService.create(await findProjectRoot(opts.cwd), { trust: opts.trust })
+    let jobId: string | undefined
+    const stop = () => {
+      if (jobId) {
+        void service.cancel(jobId).catch(() => {})
+      }
+    }
+    process.once('SIGINT', stop)
+    process.once('SIGTERM', stop)
+    try {
+      const started = await service.start()
+      jobId = started.jobId
+      if (!opts.json) {
+        process.stderr.write(`Acceptance: ${jobId}\n`)
+      }
+      const report = await service.wait(jobId)
+      output(report, opts.json)
+      process.exitCode = report.passed ? 0 : report.status === 'action_required' || report.status === 'interrupted' ? 2 : report.status === 'cancelled' ? 130 : 1
+    }
+    finally {
+      process.removeListener('SIGINT', stop)
+      process.removeListener('SIGTERM', stop)
+      await service.close()
+    }
+  })
+program
+  .command('report')
+  .description('Read a saved acceptance report and recheck source freshness')
+  .argument('<jobId>')
+  .action(async (jobId, _local, command) => {
+    const opts = command.optsWithGlobals()
+    const service = await AcceptanceService.create(await findProjectRoot(opts.cwd))
+    try {
+      output(await service.report(jobId), opts.json)
+    }
+    finally {
+      await service.close()
+    }
+  })
+program
+  .command('mcp')
+  .description('Serve project inspection and acceptance over stdio MCP; no model required')
+  .action(async (_local, command) => {
+    const opts = command.optsWithGlobals()
+    const service = await AcceptanceService.create(await findProjectRoot(opts.cwd), { trust: opts.trust })
+    const server = await serveAcceptanceMcp(service)
+    const stop = () => {
+      void service.close().then(() => server.close())
+    }
+    process.once('SIGINT', stop)
+    process.once('SIGTERM', stop)
+  })
 program.action(async () => {
   const options = program.opts()
   if (!process.stdin.isTTY || options.json) {
@@ -436,7 +501,7 @@ try {
 }
 catch (error) {
   const message = clean(error instanceof Error ? error.message : String(error))
-  if (process.argv.includes('--json')) {
+  if (process.argv.includes('--json') && !process.argv.includes('mcp')) {
     output({ version: 1, type: 'error', data: { message } }, true)
   }
   else {
