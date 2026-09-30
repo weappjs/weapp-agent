@@ -22,7 +22,7 @@ export class WeappProjectAdapter implements ProjectAdapter {
         name: 'project_info',
         description:
           'Inspect the current mini-program project structure, scripts and framework. Re-check after changing project configuration.',
-        schema: z.object({}).strict(),
+        schema: z.strictObject({}),
         mutates: false,
         async execute() {
           return {

@@ -60,34 +60,24 @@ async function walk(
   return result
 }
 export function fileTools(): Tool[] {
-  const readSchema = z
-    .object({
-      path: z.string(),
-      startLine: z.number().int().positive().default(1),
-      endLine: z.number().int().positive().optional(),
-    })
-    .strict()
-  const listSchema = z.object({ directory: z.string().default('.') }).strict()
-  const searchSchema = z
-    .object({ query: z.string().min(1), directory: z.string().default('.') })
-    .strict()
-  const createSchema = z
-    .object({ path: z.string(), content: z.string().max(500_000) })
-    .strict()
-  const editSchema = z
-    .object({
-      path: z.string(),
-      expectedHash: z.string(),
-      oldText: z.string().min(1),
-      newText: z.string(),
-    })
-    .strict()
-  const shellSchema = z
-    .object({
-      command: z.string().min(1),
-      timeoutMs: z.number().int().positive().max(600_000).default(120_000),
-    })
-    .strict()
+  const readSchema = z.strictObject({
+    path: z.string(),
+    startLine: z.number().int().positive().default(1),
+    endLine: z.number().int().positive().optional(),
+  })
+  const listSchema = z.strictObject({ directory: z.string().default('.') })
+  const searchSchema = z.strictObject({ query: z.string().min(1), directory: z.string().default('.') })
+  const createSchema = z.strictObject({ path: z.string(), content: z.string().max(500_000) })
+  const editSchema = z.strictObject({
+    path: z.string(),
+    expectedHash: z.string(),
+    oldText: z.string().min(1),
+    newText: z.string(),
+  })
+  const shellSchema = z.strictObject({
+    command: z.string().min(1),
+    timeoutMs: z.number().int().positive().max(600_000).default(120_000),
+  })
   return [
     {
       name: 'list_files',
@@ -218,7 +208,7 @@ export function fileTools(): Tool[] {
       name: 'git_diff',
       description:
         'Show tracked changes and untracked file names, preserving the current Git state.',
-      schema: z.object({}).strict(),
+      schema: z.strictObject({}),
       mutates: false,
       async execute(_input, ctx) {
         // Git may execute configured clean/process filters even with textconv

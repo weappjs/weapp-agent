@@ -90,7 +90,7 @@ export function verificationTool(
     name: 'verify_project',
     description:
       'Run configured typecheck/build/test/DevTools commands and return separate passed, failed and unverified results. Fix failures, then rerun. Missing checks are never considered passed.',
-    schema: z.object({}).strict(),
+    schema: z.strictObject({}),
     mutates: true,
     async execute(_input, context) {
       const report = await verifyProject(config, context, fingerprint)

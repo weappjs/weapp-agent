@@ -96,7 +96,7 @@ export class AiSdkAdapter implements ModelAdapter {
       onError: () => {},
       maxOutputTokens: 8192,
     })
-    for await (const part of result.fullStream) {
+    for await (const part of result.stream) {
       if (part.type === 'text-delta') {
         yield { type: 'text', text: part.text }
       }

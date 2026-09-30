@@ -5,53 +5,43 @@ import path from 'node:path'
 import process from 'node:process'
 import { z } from 'zod'
 
-export const verificationSchema = z
-  .object({
-    kind: z.enum(['typecheck', 'build', 'test', 'devtools']),
-    command: z.string().min(1),
-    args: z.array(z.string()).default([]),
-    timeoutMs: z.number().int().positive().max(1_800_000).default(120_000),
-  })
-  .strict()
+export const verificationSchema = z.strictObject({
+  kind: z.enum(['typecheck', 'build', 'test', 'devtools']),
+  command: z.string().min(1),
+  args: z.array(z.string()).default([]),
+  timeoutMs: z.number().int().positive().max(1_800_000).default(120_000),
+})
 export const mcpSchema = z.discriminatedUnion('transport', [
-  z
-    .object({
-      name: z.string().regex(/^[\w-]+$/),
-      transport: z.literal('stdio'),
-      command: z.string(),
-      args: z.array(z.string()).default([]),
-    })
-    .strict(),
-  z
-    .object({
-      name: z.string().regex(/^[\w-]+$/),
-      transport: z.literal('http'),
-      url: z.string().url(),
-      tokenEnv: z.string().optional(),
-    })
-    .strict(),
+  z.strictObject({
+    name: z.string().regex(/^[\w-]+$/),
+    transport: z.literal('stdio'),
+    command: z.string(),
+    args: z.array(z.string()).default([]),
+  }),
+  z.strictObject({
+    name: z.string().regex(/^[\w-]+$/),
+    transport: z.literal('http'),
+    url: z.url(),
+    tokenEnv: z.string().optional(),
+  }),
 ])
-export const configSchema = z
-  .object({
-    version: z.literal(1).default(1),
-    model: z
-      .object({
-        provider: z.enum(['openai', 'anthropic', 'openai-compatible']),
-        name: z.string().min(1),
-        baseURL: z.string().url().optional(),
-        apiKeyEnv: z
-          .string()
-          .regex(/^[A-Z_][A-Z0-9_]*$/)
-          .optional(),
-      })
-      .strict(),
-    maxSteps: z.number().int().min(1).max(500).default(40),
-    timeoutMs: z.number().int().positive().default(600_000),
-    contextCharacters: z.number().int().min(8000).default(100_000),
-    verification: z.array(verificationSchema).default([]),
-    mcp: z.array(mcpSchema).default([]),
-  })
-  .strict()
+export const configSchema = z.strictObject({
+  version: z.literal(1).default(1),
+  model: z.strictObject({
+    provider: z.enum(['openai', 'anthropic', 'openai-compatible']),
+    name: z.string().min(1),
+    baseURL: z.url().optional(),
+    apiKeyEnv: z
+      .string()
+      .regex(/^[A-Z_][A-Z0-9_]*$/)
+      .optional(),
+  }),
+  maxSteps: z.number().int().min(1).max(500).default(40),
+  timeoutMs: z.number().int().positive().default(600_000),
+  contextCharacters: z.number().int().min(8000).default(100_000),
+  verification: z.array(verificationSchema).default([]),
+  mcp: z.array(mcpSchema).default([]),
+})
 export type AgentConfig = z.infer<typeof configSchema>
 export type VerificationCommand = z.infer<typeof verificationSchema>
 export type McpConfig = z.infer<typeof mcpSchema>

@@ -1,5 +1,6 @@
 import type { ModelChunk } from '@weapp-agent/core'
-import { MockLanguageModelV4, simulateReadableStream } from 'ai/test'
+import { simulateReadableStream } from 'ai'
+import { MockLanguageModelV4 } from 'ai/test'
 import { expect, it } from 'vitest'
 import { AiSdkAdapter, createModel, toModelMessages } from '../src/index.js'
 
