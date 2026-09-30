@@ -1,0 +1,48 @@
+{
+  "baseline": "7e14726",
+  "node": "v24.18.0",
+  "platform": "darwin/arm64",
+  "note": "CLI bytes exclude external dependencies. LOC is physical source lines, not complexity. Help timing is 5 warm filesystem launches after one discarded launch; no model calls.",
+  "results": {
+    "self": {
+      "cliBytes": 54838,
+      "cliGzipBytes": 16450,
+      "directProductionDependencies": 12,
+      "uniqueProductionPackageVersions": 167,
+      "sourceLines": {
+        "packages/core/src/engine.ts": 347,
+        "packages/providers/src/index.ts": 162
+      },
+      "helpProcessMs": [
+        236.44,
+        233,
+        239.58,
+        244.37,
+        238.63
+      ],
+      "helpProcessMedianMs": 238.63
+    },
+    "pi": {
+      "cliBytes": 60156,
+      "cliGzipBytes": 17693,
+      "directProductionDependencies": 10,
+      "uniqueProductionPackageVersions": 275,
+      "sourceLines": {
+        "packages/core/src/pi-engine.ts": 257,
+        "packages/core/src/pi-messages.ts": 81,
+        "packages/core/src/context.ts": 86,
+        "packages/core/src/instructions.ts": 1,
+        "packages/providers/src/pi.ts": 47,
+        "packages/providers/src/credentials.ts": 8
+      },
+      "helpProcessMs": [
+        355.56,
+        373.33,
+        357.5,
+        348.25,
+        343.83
+      ],
+      "helpProcessMedianMs": 355.56
+    }
+  }
+}

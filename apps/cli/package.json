@@ -40,11 +40,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "4.0.68",
-    "@ai-sdk/openai": "4.0.81",
-    "@ai-sdk/openai-compatible": "3.0.59",
+    "@earendil-works/pi-agent-core": "0.85.1",
+    "@earendil-works/pi-ai": "0.85.1",
     "@modelcontextprotocol/sdk": "1.31.0",
-    "ai": "7.0.122",
     "commander": "15.0.0",
     "diff": "9.0.0",
     "execa": "10.0.1",

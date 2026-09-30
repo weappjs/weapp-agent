@@ -2,7 +2,7 @@ import type { ModelChunk } from '@weapp-agent/core'
 import { simulateReadableStream } from 'ai'
 import { MockLanguageModelV4 } from 'ai/test'
 import { expect, it } from 'vitest'
-import { AiSdkAdapter, createModel, toModelMessages } from '../src/index.js'
+import { AiSdkAdapter, createModel, toModelMessages } from '../src/self.js'
 
 it.each(['openai.responses', 'anthropic.messages'])(
   'normalizes %s text, tools and token usage without executing tools',

@@ -32,7 +32,7 @@ try {
   )
   await execa(
     'pnpm',
-    ['add', '--ignore-scripts', path.join(artifacts, archive)],
+    ['add', '--ignore-scripts', path.join(artifacts, archive), ...(process.env.WEAPP_AGENT_TEST_REGISTRY ? ['--registry', process.env.WEAPP_AGENT_TEST_REGISTRY] : [])],
     { cwd: temporary, timeout: 180_000 },
   )
   const cli = path.join(
@@ -81,6 +81,8 @@ try {
     ),
     'Private workspace packages are bundled',
   )
+  assert(!Object.keys(manifest.dependencies).some(name => name === 'ai' || name.startsWith('@ai-sdk/')), 'Baseline AI SDK is not a production CLI dependency')
+  await execa(process.execPath, [path.join(root, 'scripts/smoke-pi-cli.mjs'), cli], { cwd: root, timeout: 60_000, stdio: 'inherit' })
   console.log(
     'PASS: standalone tarball install, help, init, trusted verify, and unverified DevTools reporting',
   )

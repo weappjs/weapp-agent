@@ -44,6 +44,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@earendil-works/pi-agent-core": "0.85.1",
+    "@earendil-works/pi-ai": "0.85.1",
     "diff": "9.0.0",
     "execa": "10.0.1",
     "zod": "4.6.5"

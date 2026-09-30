@@ -1,5 +1,7 @@
 # Weapp Agent
 
+This branch runs the CLI on Pi agent-core + Pi AI 0.85.1. The self-written baseline is commit `7e14726`. See [the comparison report](reports/pi-comparison.md); use separate `WEAPP_AGENT_STATE_DIR` values when trying both builds.
+
 An independent AI coding agent for WeChat mini-programs. Built for weapp-vite native and Wevu projects, with inspectable edits, local sessions and explicit verification results.
 
 [Documentation](https://agent.weapp.dev/en/quickstart) · [中文](README.md)

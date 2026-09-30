@@ -10,9 +10,11 @@ versioning:
   changelog:
     storage: repository
 allowBuilds:
+  '@google/genai': false
   '@tailwindcss/oxide': true
   esbuild: true
   msgpackr-extract: true
+  protobufjs: false
   sharp: true
   vue-demi: true
   workerd: true

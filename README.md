@@ -2,6 +2,8 @@
 
 **从一句需求，到可验证的小程序改动。**
 
+> 当前分支为 Pi 对比实现：CLI 使用 `pi-agent-core` + `pi-ai` 0.85.1；自研基线固定为 `7e14726`。运行方式保持一致，实验结果与限制见 [Pi 对比报告](reports/pi-comparison.md)。建议设置不同的 `WEAPP_AGENT_STATE_DIR` 分别体验两个版本。
+
 [文档](https://agent.weapp.dev) · [English](README.en.md) · [贡献指南](CONTRIBUTING.md)
 
 面向微信小程序的独立 AI CLI。支持 weapp-vite 原生与 Wevu 项目，使用自己的模型和 API Key，在本机完成读取、编辑、构建、测试与开发者工具交互。

@@ -43,10 +43,13 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@earendil-works/pi-ai": "0.85.1",
+    "@weapp-agent/core": "workspace:*"
+  },
+  "devDependencies": {
     "@ai-sdk/anthropic": "4.0.68",
     "@ai-sdk/openai": "4.0.81",
     "@ai-sdk/openai-compatible": "3.0.59",
-    "@weapp-agent/core": "workspace:*",
     "ai": "7.0.122"
   }
 }

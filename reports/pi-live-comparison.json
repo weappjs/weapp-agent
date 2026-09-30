@@ -1,0 +1,15 @@
+{
+  "candidate": "/Users/icebreaker/.codex/worktrees/pi-migration/weapp-agent/apps/cli/dist/index.mjs",
+  "results": [
+    {
+      "provider": "openai",
+      "status": "unverified",
+      "reason": "Requires a separate baseline CLI argument, OPENAI_API_KEY and WEAPP_AGENT_OPENAI_MODEL"
+    },
+    {
+      "provider": "anthropic",
+      "status": "unverified",
+      "reason": "Requires a separate baseline CLI argument, ANTHROPIC_API_KEY and WEAPP_AGENT_ANTHROPIC_MODEL"
+    }
+  ]
+}

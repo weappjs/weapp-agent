@@ -19,7 +19,7 @@ import {
   loadConfig,
   projectFingerprint,
   redactor,
-  runAgent,
+  runPiAgent,
   Session,
   stateRoot,
   trustProject,
@@ -35,7 +35,7 @@ import {
   verifyProject,
   WeappProjectAdapter,
 } from '@weapp-agent/mini-program'
-import { apiKeyVariable, createModel } from '@weapp-agent/providers'
+import { apiKeyVariable, createPiModel } from '@weapp-agent/providers'
 import { Command, Option } from 'commander'
 import { execa } from 'execa'
 import { eventText, interactive } from './ui.js'
@@ -136,7 +136,7 @@ async function execute(
     options,
     selectedApprover,
   )
-  const model = createModel(config.model)
+  const model = createPiModel(config.model)
   const adapter = new WeappProjectAdapter()
   const project = await adapter.detect(root)
   const abort = new AbortController()
@@ -183,7 +183,7 @@ async function execute(
       }
     }
     const attached = await images(options.image ?? [])
-    return await runAgent({
+    return await runPiAgent({
       root,
       config,
       model,
